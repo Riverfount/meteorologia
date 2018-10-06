@@ -1,6 +1,7 @@
 import Adafruit_DHT as dht
 import RPi.GPIO as gpio
 import psycopg2
+import requests
 
 sensor = dht.DHT11
 gpio.setmode(gpio.BOARD)
@@ -21,16 +22,8 @@ umid, temp = dht.read_retry(sensor, pino_sensor)
 sql = f"""
     INSERT INTO dados_temp_umid (temperatura, umidade)
     VALUES ({temp:.2f}, {umid:.2f})"""
-
 cursor.execute(sql)
 connect.commit()
-
 connect.close()
 
-# while True:
-#     umid, temp = dht.read_retry(sensor, pino_sensor)
-#     if umid is not None and temp is not None:
-#         response = requests.get('{}?api_key={}&field1={}&field2={}'.format(url, api_key, temp, umid))
-#         time.sleep(15 * 60)
-#     else:
-#         print("Falha ao ler dados do DHT11 !!!")
+response = requests.get(f'{url}?api_key={api_key}&field1={temp}&field2={umid}')
