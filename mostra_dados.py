@@ -4,7 +4,7 @@ import psycopg2
 from pytz import timezone
 
 connect = psycopg2.connect(
-    host='192.168.0.106',
+    host='192.168.0.115',
     database='postgres',
     user='postgres',
     password='postgres'
